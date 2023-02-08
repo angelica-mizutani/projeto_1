@@ -1,0 +1,90 @@
+class Tela1 {
+    String nome, d1, d2, d3;
+    double nota1_d1, nota2_d1, nota1_d2, nota2_d2, nota1_d3, nota2_d3;
+
+    TextInput(
+        label: "Nome:",
+        value: nome
+    );
+
+    TextInput(
+        label: "Disciplina:",
+        value: d1
+    );
+
+    TextInput(
+        label: "Nota 1:",
+        value: nota1_d1
+    );
+
+    TextInput(
+        label: "Nota 2:",
+        value: nota2_d1
+    );
+
+    TextInput(
+        label: "Disciplina:",
+        value: d2
+    );
+
+    TextInput(
+        label: "Nota 1:",
+        value: nota1_d2
+    );
+
+    TextInput(
+        label: "Nota 2:",
+        value: nota2_d2
+    );
+
+    TextInput(
+        label: "Disciplina:",
+        value: d3
+    );
+
+    TextInput(
+        label: "Nota 1:",
+        value: nota1_d3
+    );
+
+    TextInput(
+        label: "Nota 2:",
+        value: nota2_d3
+    );
+
+    Button(
+        label: "Calcular"
+        onClick: () {
+            db = DB.connect();
+            db.execute("CREATE TABLE IF NOT EXISTS disciplinas_alunos(
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                disciplina VARCHAR (255) NOT NULL,
+                nota_1 DOUBLE NOT NULL,
+                nota_2 DOUBLE NOT NULL
+            )");
+            db.execute("INSERT INTO disciplinas_alunos (disciplina, nota1, nota2, aluno) VALUES(d1, nota1_d1, nota2_d1, nome)");
+            db.execute("INSERT INTO disciplinas_alunos (disciplina, nota1, nota2, aluno) VALUES(d2, nota1_d2, nota2_d2, nome)");
+            db.execute("INSERT INTO disciplinas_alunos (disciplina, nota1, nota2, aluno) VALUES(d3, nota1_d3, nota2_d3, nome)");
+            db.commit();
+
+            NavigateTo(Tela2);
+        }
+    );
+}
+
+
+class Tela2{
+    db = DB.connect();
+    dados = db.execute(SELECT * from disciplinas_alunos);
+    
+    for dado in dados {
+        Text("Nome: " + dado.aluno);
+        Text("Disciplina: " + dado.disciplina);
+        Text("Média: " + ((dado.nota1 + dado.nota2)/2).toString());
+        if ((dado.nota1 + dado.nota2)/2) >= 6.0 {
+            Text("Aprovado!");
+        } else {
+            Text("Reprovado");
+        }
+    }
+}
